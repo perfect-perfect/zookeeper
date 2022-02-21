@@ -27,6 +27,8 @@ app.use(express.urlencoded({ extended: true }));
 // takes incoming POST data in the form of JSON and parses it into the req.body
 app.use(express.json());
 
+app.use(express.static('public'));
+
 // The parameters
 //  - query
 //      - the .get() sends this here. it is the req.query
@@ -151,6 +153,26 @@ app.post('/api/animals', (req, res) => {
         const animal = createNewAnimal(req.body, animals);
         res.json(animal);
     }
+});
+
+// unlike most GET and POST routes that deal with creating or return JSON data this GET route has just one job, to respond with an HTML page to display in the browser
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+// GET for the animal.html
+app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+// GET for the zookeepers.html
+app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
+
+// wildcard GET route
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 app.listen(PORT, () => {
